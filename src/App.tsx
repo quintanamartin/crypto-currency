@@ -1,5 +1,5 @@
-import { Box, Flex } from '@chakra-ui/layout';
-import { Center, Spinner } from '@chakra-ui/react';
+import { Box, SimpleGrid } from '@chakra-ui/layout';
+import { Center, Flex, Spacer, Spinner } from '@chakra-ui/react';
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import Form from './components/Form';
@@ -31,18 +31,20 @@ function App() {
     const component = loading ? <Spinner m={5} /> : <Value result={result} />;
 
     return (
-        <Flex spacing='24px' bg='gray.100' align='center' justify='center' height='100vh' direction='row'>
-            <Box>
-                <Center>
-                    <CryptoImage />
-                </Center>
-            </Box>
-            <Box>
-                <Header title='Cryptocurrency' />
-                <Form setCurrency={setCurrency} setCrypto={setCrypto} />
-                {component}
-            </Box>
-        </Flex>
+        <Box w='100%' h='100vh' align='center'>
+            <SimpleGrid columns={2} spacing={10} bg='gray.100'>
+                <Box>
+                    <Center>
+                        <CryptoImage />
+                    </Center>
+                </Box>
+                <Box>
+                    <Header title='Cryptocurrency' />
+                    <Form setCurrency={setCurrency} setCrypto={setCrypto} />
+                    {component}
+                </Box>
+            </SimpleGrid>
+        </Box>
     );
 }
 
