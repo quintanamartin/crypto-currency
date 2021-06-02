@@ -1,5 +1,5 @@
 import { Box, Flex } from '@chakra-ui/layout';
-import { Center } from '@chakra-ui/react';
+import { Center, Spinner } from '@chakra-ui/react';
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import Form from './components/Form';
@@ -11,6 +11,7 @@ function App() {
     const [currency, setCurrency] = useState('');
     const [crypto, setCrypto] = useState('');
     const [result, setResult] = useState({});
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const estimateCurrency = async () => {
@@ -18,10 +19,17 @@ function App() {
 
             const url = `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${crypto}&tsyms=${currency}`;
             const result = await axios.get(url);
-            setResult(result.data.DISPLAY[crypto][currency]);
+            setLoading(true);
+            setTimeout(() => {
+                setResult(result.data.DISPLAY[crypto][currency]);
+                setLoading(false);
+            }, 2000);
         };
         estimateCurrency();
     }, [currency, crypto]);
+
+    const component = loading ? <Spinner m={5} /> : <Value result={result} />;
+
     return (
         <Flex spacing='24px' bg='gray.100' align='center' justify='center' height='100vh' direction='row'>
             <Box>
@@ -32,7 +40,7 @@ function App() {
             <Box>
                 <Header title='Cryptocurrency' />
                 <Form setCurrency={setCurrency} setCrypto={setCrypto} />
-                <Value result={result} />
+                {component}
             </Box>
         </Flex>
     );
